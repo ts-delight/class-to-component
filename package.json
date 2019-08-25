@@ -1,0 +1,54 @@
+{
+  "name": "@ts-delight/class-to-component",
+  "description": "Pass in a class name and get back a react component",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/class-to-component.esm.js",
+  "typings": "dist/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "react",
+    "classname",
+    "hoc"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test"
+  },
+  "peerDependencies": {
+    "@types/react": "^16.9.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "dependencies": {
+    "classcat": "^4.0.2",
+    "lodash": "^4.17.15",
+    "react": "^16.9.0",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.137",
+    "@types/prettier": "^1.18.2",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "react-dom": "^16.9.0",
+    "tsdx": "^0.8.0",
+    "typescript": "^3.5.3"
+  }
+}
