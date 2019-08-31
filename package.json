@@ -17,7 +17,8 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
-    "test": "tsdx test"
+    "test": "tsdx test",
+    "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
     "@types/react": "^16.9.2"
