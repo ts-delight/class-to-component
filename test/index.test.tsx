@@ -5,11 +5,11 @@ import * as React from 'react';
 test('Basic usage', () => {
   const C1 = classToComponent('foo');
   expect(renderToString(<C1 />)).toMatchInlineSnapshot(
-    `"<div class=\\"foo\\" data-reactroot=\\"\\"></div>"`
+    `"<div class=\\"foo\\"></div>"`
   );
   const C2 = classToComponent(['foo', 'bar']);
   expect(renderToString(<C2 />)).toMatchInlineSnapshot(
-    `"<div class=\\"foo bar\\" data-reactroot=\\"\\"></div>"`
+    `"<div class=\\"foo bar\\"></div>"`
   );
 });
 
@@ -22,10 +22,10 @@ test('Advanced usage', () => {
     },
   });
   expect(renderToString(<C1 designation="admin" />)).toMatchInlineSnapshot(
-    `"<div class=\\"elaborate-view\\" data-reactroot=\\"\\"></div>"`
+    `"<div class=\\"elaborate-view\\"></div>"`
   );
   expect(renderToString(<C1 designation="staff" />)).toMatchInlineSnapshot(
-    `"<div class=\\"compact-view\\" data-reactroot=\\"\\"></div>"`
+    `"<div class=\\"compact-view\\"></div>"`
   );
   expect(C1.displayName).toMatchInlineSnapshot(`"AdminPanel"`);
   const C2 = classToComponent({
@@ -34,7 +34,7 @@ test('Advanced usage', () => {
     element: 'span',
   });
   expect(renderToString(<C2 />)).toMatchInlineSnapshot(
-    `"<span class=\\"foo bar\\" data-reactroot=\\"\\"></span>"`
+    `"<span class=\\"foo bar\\"></span>"`
   );
   expect(C2.displayName).toMatchInlineSnapshot(`"AdminPanel"`);
 });
