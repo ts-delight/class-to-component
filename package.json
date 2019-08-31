@@ -1,7 +1,7 @@
 {
   "name": "@ts-delight/class-to-component",
   "description": "Pass in a class name and get back a react component",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "dist/index.js",
   "module": "dist/class-to-component.esm.js",
   "typings": "dist/index.d.ts",
