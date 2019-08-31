@@ -2,7 +2,7 @@ import cc, { Class } from "classcat";
 import isArray from "lodash/isArray";
 import { createElement as el, CSSProperties, forwardRef, Ref } from "react";
 
-export interface ITargetProps {
+interface ITargetProps {
     className?: string;
     style?: CSSProperties;
     children?: any;
@@ -49,13 +49,13 @@ const normalizeParams = <P>(
 ): ClassToComponentParamsNormalized<P> => {
     if (typeof params === "string") {
         return injectDefaults({
-            class: () => params,
+            class: (p: ITargetProps) => [params, p.className],
             element: "div"
         });
     }
     if ((isArray as TypeGuard<any[]>)(params)) {
         return injectDefaults({
-            class: () => params,
+            class: (p: ITargetProps) => [...params, p.className],
             element: "div"
         });
     }
@@ -68,9 +68,9 @@ const normalizeParams = <P>(
     return injectDefaults<P>(params);
 };
 
-const classToComponent = <P extends ITargetProps>(params: ClassToComponentParams<P>) => {
-    const normalized = normalizeParams<P>(params);
-    const Component = forwardRef((props: P, ref) =>
+const classToComponent = <P extends {} = {}>(params: ClassToComponentParams<P & ITargetProps>) => {
+    const normalized = normalizeParams<P & ITargetProps>(params);
+    const Component = forwardRef((props: P & ITargetProps, ref) =>
         el(
             normalized.element,
             {
