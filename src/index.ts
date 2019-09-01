@@ -1,5 +1,6 @@
-import cc, { Class } from "classcat";
+import cc, { ClassArray, Class } from "classcat";
 import isArray from "lodash/isArray";
+import castArray from "lodash/castArray";
 import { createElement as el, CSSProperties, forwardRef, Ref } from "react";
 
 interface ITargetProps {
@@ -9,17 +10,22 @@ interface ITargetProps {
     ref?: Ref<any>;
 }
 
-interface ClassToComponentParamsNormalized<P> {
+interface ClassToComponentParamsNormalized {
     displayName: string;
-    class: (p: P) => Class;
+    class: ClassArray;
     element: React.ElementType<ITargetProps>;
 }
 
-type ClassToComponentParams<P = {}> =
+interface ClassToComponentParamsObj {
+    displayName?: string,
+    class?: Class,
+    element?: React.ElementType<ITargetProps>
+}
+
+type ClassToComponentParams =
+    | ClassToComponentParamsObj
     | string
     | string[]
-    | ((p: P) => Class)
-    | Partial<ClassToComponentParamsNormalized<P>>;
 
 type TypeGuard<T> = (i: any) => i is T;
 
@@ -35,52 +41,49 @@ const getDisplayName = (component: React.ElementType<any>) => {
     return "Unknown";
 };
 
-const injectDefaults = <P>(
-    params: Partial<ClassToComponentParamsNormalized<P>>
-): ClassToComponentParamsNormalized<P> => ({
+const injectDefaults = (
+    params: ClassToComponentParamsObj
+): ClassToComponentParamsNormalized => ({
     element: "div",
-    class: () => [],
     displayName: `ClassToComponent<${getDisplayName(params.element || "div")}>`,
-    ...params
+    ...params,
+    class: castArray(params.class),
 });
 
-const normalizeParams = <P>(
-    params: ClassToComponentParams<P>
-): ClassToComponentParamsNormalized<P> => {
+const normalizeParams = (params: ClassToComponentParams): ClassToComponentParamsNormalized => {
     if (typeof params === "string") {
         return injectDefaults({
-            class: (p: ITargetProps) => [params, p.className],
+            class: [params],
             element: "div"
         });
     }
     if ((isArray as TypeGuard<any[]>)(params)) {
         return injectDefaults({
-            class: (p: ITargetProps) => [...params, p.className],
+            class: [...params],
             element: "div"
         });
     }
-    if (typeof params === "function") {
-        return injectDefaults({
-            class: params,
-            element: "div"
-        });
-    }
-    return injectDefaults<P>(params);
+    return injectDefaults(params);
 };
 
-const classToComponent = <P extends {} = {}>(params: ClassToComponentParams<P & ITargetProps>) => {
-    const normalized = normalizeParams<P & ITargetProps>(params);
+const classToComponent = <P extends {} = {}>(params: ClassToComponentParams) => {
+    const normalized = normalizeParams(params);
     const Component = forwardRef((props: P & ITargetProps, ref) =>
         el(
             normalized.element,
             {
                 ...props,
-                className: cc(normalized.class(props)),
+                className: cc(
+                    props.className
+                        ? normalized.class.concat(props.className)
+                        : normalized.class
+                ),
                 style: props.style,
                 ref
             },
             props.children
         ));
+
     Component.displayName = normalized.displayName;
     return Component;
 };
