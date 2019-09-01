@@ -74,6 +74,7 @@ const classToComponent = <P extends {} = {}>(params: ClassToComponentParams<P & 
         el(
             normalized.element,
             {
+                ...props,
                 className: cc(normalized.class(props)),
                 style: props.style,
                 ref
